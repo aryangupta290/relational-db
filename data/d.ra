@@ -1,0 +1,11 @@
+LOAD Student
+LOAD Advisor
+LOAD Marks
+Q41 <- CROSS Student Marks
+Q42 <- SELECT Student_Stud_Id == Marks_Stud_Id FROM Q41
+Q43 <- SELECT Maths_marks >= 70 FROM Q42
+Q44 <- SELECT Physics_marks > 60 FROM Q43
+Q45 <- SELECT Stud_age <= 18 FROM Q44
+Q46 <- SELECT Stud_age >= 16 FROM Q45
+Q47 <- PROJECT Student_Stud_Id, Maths_marks, Physics_marks, Stud_age FROM Q46
+PRINT Q47

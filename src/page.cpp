@@ -3,14 +3,10 @@
  * @brief Construct a new Page object. Never used as part of the code
  *
  */
-Page::Page()
-{
+Page::Page() {
     this->pageName = "";
-    this->tableName = "";
-    this->pageIndex = -1;
     this->rowCount = 0;
     this->columnCount = 0;
-    this->rows.clear();
 }
 
 /**
@@ -22,11 +18,10 @@ Page::Page()
  * loads the rows (or tuples) into a vector of rows (where each row is a vector
  * of integers).
  *
- * @param tableName 
- * @param pageIndex 
+ * @param tableName
+ * @param pageIndex
  */
-Page::Page(string tableName, int pageIndex)
-{
+TablePage::TablePage(string tableName, int pageIndex) {
     logger.log("Page::Page");
     this->tableName = tableName;
     this->pageIndex = pageIndex;
@@ -40,10 +35,8 @@ Page::Page(string tableName, int pageIndex)
     ifstream fin(pageName, ios::in);
     this->rowCount = table.rowsPerBlockCount[pageIndex];
     int number;
-    for (uint rowCounter = 0; rowCounter < this->rowCount; rowCounter++)
-    {
-        for (int columnCounter = 0; columnCounter < columnCount; columnCounter++)
-        {
+    for (uint rowCounter = 0; rowCounter < this->rowCount; rowCounter++) {
+        for (int columnCounter = 0; columnCounter < columnCount; columnCounter++) {
             fin >> number;
             this->rows[rowCounter][columnCounter] = number;
         }
@@ -53,12 +46,11 @@ Page::Page(string tableName, int pageIndex)
 
 /**
  * @brief Get row from page indexed by rowIndex
- * 
- * @param rowIndex 
- * @return vector<int> 
+ *
+ * @param rowIndex
+ * @return vector<int>
  */
-vector<int> Page::getRow(int rowIndex)
-{
+vector<int> Page::getRow(int rowIndex) {
     logger.log("Page::getRow");
     vector<int> result;
     result.clear();
@@ -67,29 +59,63 @@ vector<int> Page::getRow(int rowIndex)
     return this->rows[rowIndex];
 }
 
-Page::Page(string tableName, int pageIndex, vector<vector<int>> rows, int rowCount)
-{
+TablePage::TablePage(string tableName, int pageIndex, vector<vector<int>> rows, int rowCount) {
     logger.log("Page::Page");
     this->tableName = tableName;
     this->pageIndex = pageIndex;
     this->rows = rows;
     this->rowCount = rowCount;
     this->columnCount = rows[0].size();
-    this->pageName = "../data/temp/"+this->tableName + "_Page" + to_string(pageIndex);
+    this->pageName = "../data/temp/" + this->tableName + "_Page" + to_string(pageIndex);
 }
 
+MatrixPage::MatrixPage(string matrixName, int rowId, int colId) {
+    logger.log("Page::Page");
+    this->matrixName = matrixName;
+    this->rowId = rowId;
+    this->colId = colId;
+    this->rowCount = MATRIX_PAGE_DIMENSION;
+    this->columnCount = MATRIX_PAGE_DIMENSION;
+    this->pageName = "../data/temp/" + this->matrixName + "_Page" + to_string(this->rowId) + to_string(this->colId);
+    this->rows = vector<vector<int>>(MATRIX_PAGE_DIMENSION, vector<int>(MATRIX_PAGE_DIMENSION, -1));
+    ifstream readPageFile(this->pageName, ios ::in);
+    if (!readPageFile.is_open()) {
+        cerr << "Failed to open file: " << this->pageName << endl;
+    } else {
+        for (int i = 0; i < MATRIX_PAGE_DIMENSION; i++) {
+            for (int j = 0; j < MATRIX_PAGE_DIMENSION; j++) {
+                int temp;
+                if (!(readPageFile >> temp)) {
+                    cerr << "Error reading data from file." << endl;
+                    // Handle the error, e.g., return or throw an exception
+                }
+                this->rows[i][j] = temp;  // -1's are also filled
+                
+            }
+        }
+        readPageFile.close();  // Close the file when done
+    }
+}
+
+MatrixPage::MatrixPage(string matrixName, int rowId, int colId, vector<vector<int>>& rows) {
+    logger.log("Page::Page");
+    this->matrixName = matrixName;
+    this->rowId = rowId;
+    this->rowCount = MATRIX_PAGE_DIMENSION;
+    this->columnCount = MATRIX_PAGE_DIMENSION;
+    this->colId = colId;
+    this->pageName = "../data/temp/" + this->matrixName + "_Page" + to_string(this->rowId) + to_string(this->colId);
+    this->rows = rows;
+}
 /**
  * @brief writes current page contents to file.
- * 
+ *
  */
-void Page::writePage()
-{
+void Page::writePage() {
     logger.log("Page::writePage");
     ofstream fout(this->pageName, ios::trunc);
-    for (int rowCounter = 0; rowCounter < this->rowCount; rowCounter++)
-    {
-        for (int columnCounter = 0; columnCounter < this->columnCount; columnCounter++)
-        {
+    for (int rowCounter = 0; rowCounter < this->rowCount; rowCounter++) {
+        for (int columnCounter = 0; columnCounter < this->columnCount; columnCounter++) {
             if (columnCounter != 0)
                 fout << " ";
             fout << this->rows[rowCounter][columnCounter];

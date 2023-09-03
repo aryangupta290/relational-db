@@ -1,9 +1,9 @@
+#include "matrixCatalogue.h"
 #include "tableCatalogue.h"
 
 using namespace std;
 
-enum QueryType
-{
+enum QueryType {
     CLEAR,
     CROSS,
     DISTINCT,
@@ -12,6 +12,13 @@ enum QueryType
     JOIN,
     LIST,
     LOAD,
+    LOAD_MATRIX,
+    PRINT_MATRIX,
+    TRANSPOSE_MATRIX,
+    RENAME_MATRIX,
+    CHECKSYMMETRY,
+    EXPORT_MATRIX,
+    COMPUTE,
     PRINT,
     PROJECTION,
     RENAME,
@@ -21,8 +28,7 @@ enum QueryType
     UNDETERMINED
 };
 
-enum BinaryOperator
-{
+enum BinaryOperator {
     LESS_THAN,
     GREATER_THAN,
     LEQ,
@@ -32,24 +38,20 @@ enum BinaryOperator
     NO_BINOP_CLAUSE
 };
 
-enum SortingStrategy
-{
+enum SortingStrategy {
     ASC,
     DESC,
     NO_SORT_CLAUSE
 };
 
-enum SelectType
-{
+enum SelectType {
     COLUMN,
     INT_LITERAL,
     NO_SELECT_CLAUSE
 };
 
-class ParsedQuery
-{
-
-public:
+class ParsedQuery {
+   public:
     QueryType queryType = UNDETERMINED;
 
     string clearRelationName = "";
@@ -99,6 +101,15 @@ public:
     string sortColumnName = "";
     string sortRelationName = "";
 
+    string loadMatrixFileName = "";
+    string printMatrixFileName = "";
+    string transposeMatrixFileName = "";
+    string renameMatrixFromFileName = "";
+    string renameMatrixToFileName = "";
+    string checkSymmetryMatrixFileName = "";
+    string computeFileName = "";
+    string exportMatrixFileName = "";
+
     string sourceFileName = "";
 
     ParsedQuery();
@@ -120,6 +131,13 @@ bool syntacticParseRENAME();
 bool syntacticParseSELECTION();
 bool syntacticParseSORT();
 bool syntacticParseSOURCE();
+bool syntacticParseMATRIXLOAD();
+bool syntacticParseMATRIXPRINT();
+bool syntacticParseMATRIXTRANSPOSE();
+bool syntacticParseMATRIXRENAME();
+bool syntacticParseMATRIXEXPORT();
+bool syntacticParseCHECKSYMMETRY();
+bool syntacticParseCOMPUTE();
 
 bool isFileExists(string tableName);
 bool isQueryFile(string fileName);

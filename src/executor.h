@@ -1,4 +1,4 @@
-#include"semanticParser.h"
+#include "semanticParser.h"
 
 void executeCommand();
 
@@ -12,6 +12,13 @@ void executeLIST();
 void executeLOAD();
 void executePRINT();
 void executePROJECTION();
+void executeMatrixLoad();
+void executeMatrixPrint();
+void executeMatrixTranspose();
+void executeMatrixRename();
+void executeMatrixExport();
+void executeCheckSymmetry();
+void executeCompute();
 void executeRENAME();
 void executeSELECTION();
 void executeSORT();

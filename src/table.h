@@ -1,7 +1,6 @@
 #include "cursor.h"
 
-enum IndexingStrategy
-{
+enum IndexingStrategy {
     BTREE,
     HASH,
     NOTHING
@@ -13,14 +12,13 @@ enum IndexingStrategy
  * and the buffer manager. There are typically 2 ways a table object gets
  * created through the course of the workflow - the first is by using the LOAD
  * command and the second is to use assignment statements (SELECT, PROJECT,
- * JOIN, SORT, CROSS and DISTINCT). 
+ * JOIN, SORT, CROSS and DISTINCT).
  *
  */
-class Table
-{
+class Table {
     vector<unordered_set<int>> distinctValuesInColumns;
 
-public:
+   public:
     string sourceFileName = "";
     string tableName = "";
     vector<string> columns;
@@ -33,7 +31,7 @@ public:
     bool indexed = false;
     string indexedColumn = "";
     IndexingStrategy indexingStrategy = NOTHING;
-    
+
     bool extractColumnNames(string firstLine);
     bool blockify();
     void updateStatistics(vector<int> row);
@@ -52,38 +50,35 @@ public:
     void unload();
 
     /**
- * @brief Static function that takes a vector of valued and prints them out in a
- * comma seperated format.
- *
- * @tparam T current usaages include int and string
- * @param row 
- */
-template <typename T>
-void writeRow(vector<T> row, ostream &fout)
-{
-    logger.log("Table::printRow");
-    for (int columnCounter = 0; columnCounter < row.size(); columnCounter++)
-    {
-        if (columnCounter != 0)
-            fout << ", ";
-        fout << row[columnCounter];
+     * @brief Static function that takes a vector of valued and prints them out in a
+     * comma seperated format.
+     *
+     * @tparam T current usaages include int and string
+     * @param row
+     */
+    template <typename T>
+    void writeRow(vector<T> row, ostream &fout) {
+        logger.log("Table::printRow");
+        for (int columnCounter = 0; columnCounter < row.size(); columnCounter++) {
+            if (columnCounter != 0)
+                fout << ", ";
+            fout << row[columnCounter];
+        }
+        fout << endl;
     }
-    fout << endl;
-}
 
-/**
- * @brief Static function that takes a vector of valued and prints them out in a
- * comma seperated format.
- *
- * @tparam T current usaages include int and string
- * @param row 
- */
-template <typename T>
-void writeRow(vector<T> row)
-{
-    logger.log("Table::printRow");
-    ofstream fout(this->sourceFileName, ios::app);
-    this->writeRow(row, fout);
-    fout.close();
-}
+    /**
+     * @brief Static function that takes a vector of valued and prints them out in a
+     * comma seperated format.
+     *
+     * @tparam T current usaages include int and string
+     * @param row
+     */
+    template <typename T>
+    void writeRow(vector<T> row) {
+        logger.log("Table::printRow");
+        ofstream fout(this->sourceFileName, ios::app);
+        this->writeRow(row, fout);
+        fout.close();
+    }
 };

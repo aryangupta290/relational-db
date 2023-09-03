@@ -1,19 +1,23 @@
-#include<iostream>
-#include<bits/stdc++.h>
-#include<sys/stat.h> 
-#include<fstream>
+#ifndef __LOGGER_H
+#define __LOGGER_H
+
+#include <bits/stdc++.h>
+#include <sys/stat.h>
+
+#include <fstream>
+#include <iostream>
 
 using namespace std;
 
-class Logger{
-
+class Logger {
     string logFile = "log";
     ofstream fout;
-    
-    public:
 
+   public:
     Logger();
     void log(string logString);
 };
 
 extern Logger logger;
+
+#endif

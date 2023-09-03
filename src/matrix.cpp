@@ -57,60 +57,6 @@ void print_info() {
     cout << "Number of blocks accessed: " << num_blocks_read + num_blocks_write << endl;
 }
 
-// bool Matrix::blockify() {
-//     logger.log("Matrix::blockify");
-
-//     for (int block_y = 0; block_y < this->blockCountSqrt; block_y++) {
-//         // reach from block_y * MATRIX_PAGE_DIMENSION col to (block_y+1) * MATRIX_PAGE_DIMENSION.
-//         ifstream f(this->sourceFileName, ios::in);
-//         vector<vector<int>> cur_page(MATRIX_PAGE_DIMENSION, vector<int>(MATRIX_PAGE_DIMENSION));
-//         int block_x = 0;
-//         string line;
-//         int cur_page_sz = 0;
-//         while (getline(f, line)) {
-//             cout << "line: " << line << endl;
-//             if (cur_page_sz == MATRIX_PAGE_DIMENSION) {
-//                 bufferManager.writePageForMatrix(this->hashedName, block_x, block_y, cur_page);
-//                 num_blocks_write++;
-//                 cur_page = vector<vector<int>>(MATRIX_PAGE_DIMENSION, vector<int>(MATRIX_PAGE_DIMENSION));
-//                 cur_page_sz = 0;
-//                 block_x++;
-//             }
-//             {
-//                 string num;
-//                 stringstream s(line);
-//                 int cursor = 0;
-//                 for (; cursor < block_y * MATRIX_PAGE_DIMENSION; cursor++) {
-//                     getline(s, num, ',');
-//                 }
-//                 vector<int> res;
-//                 for (; cursor < min(this->dimension, (block_y + 1) * MATRIX_PAGE_DIMENSION); cursor++) {
-//                     getline(s, num, ',');
-//                     cout << "num: " << num << endl;
-//                     while (num.size() && num.back() == ' ') {
-//                         num.pop_back();
-//                     }
-//                     reverse(num.begin(), num.end());
-
-//                     while (num.size() && num.back() == ' ') {
-//                         num.pop_back();
-//                     }
-//                     reverse(num.begin(), num.end());
-//                     res.push_back(stoi(num));
-//                 }
-//                 while (res.size() < MATRIX_PAGE_DIMENSION) res.push_back(0);
-//                 cur_page[cur_page_sz] = res;
-//                 cur_page_sz += 1;
-//             }
-//         }
-//         bufferManager.writePageForMatrix(this->hashedName, block_x, block_y, cur_page);
-//         num_blocks_write++;
-//         f.close();
-//     }
-//     print_info();
-//     return true;
-// }
-
 bool Matrix::blockify() {
     logger.log("Matrix::blockify");
     ifstream f(this->sourceFileName, ios::in);
@@ -227,8 +173,8 @@ void Matrix::compute() {
             subtract_matrix(res2, transposedMatrix1);
             bufferManager.writePageForMatrix(matrix->hashedName, i, j, res1);
             bufferManager.writePageForMatrix(matrix->hashedName, j, i, res2);
-            num_blocks_read++;
-            num_blocks_write++;
+            num_blocks_read += 2;
+            num_blocks_write += 2;
         }
     }
     matrixCatalogue.insertMatrix(matrix);
@@ -311,21 +257,6 @@ void Matrix::print() {
     }
     int dx[] = {0, 0, 1, 1};
     int dy[] = {0, 1, 0, 1};
-    // for (int blockx = 0; blockx < this->blockCountSqrt; blockx++) {
-    //     for (int blocky = 0; blocky < this->blockCountSqrt; blocky++) {
-    //         int ii = 0, jj = 0;
-    //         vector<vector<int>> res = bufferManager.getMatrixPage(this->hashedName, blockx, blocky).rows;
-
-    //         for (int r = blockx * MATRIX_PAGE_DIMENSION; r < (blockx + 1) * MATRIX_PAGE_DIMENSION; r++) {
-    //             jj = 0;
-    //             for (int c = blocky * MATRIX_PAGE_DIMENSION; c < (blocky + 1) * MATRIX_PAGE_DIMENSION; c++) {
-    //                 ans[r][c] = res[ii][jj];
-    //                 jj++;
-    //             }
-    //             ii++;
-    //         }
-    //     }
-    // }
     for (int p = 0; p < 4; p++) {
         int blockx = dx[p];
         int blocky = dy[p];

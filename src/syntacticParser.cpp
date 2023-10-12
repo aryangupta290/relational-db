@@ -3,6 +3,7 @@
 bool syntacticParse() {
     logger.log("syntacticParse");
     string possibleQueryType = tokenizedQuery[0];
+    logger.log(possibleQueryType);
 
     if (tokenizedQuery.size() < 2) {
         cout << "SYNTAX ERROR" << endl;
@@ -39,6 +40,8 @@ bool syntacticParse() {
         return syntacticParseEXPORT();
     else if (possibleQueryType == "SOURCE")
         return syntacticParseSOURCE();
+    else if (possibleQueryType == "SORT")
+        return syntacticParseSORT();
     else {
         string resultantRelationName = possibleQueryType;
         if (tokenizedQuery[1] != "<-" || tokenizedQuery.size() < 3) {
@@ -56,8 +59,7 @@ bool syntacticParse() {
             return syntacticParseCROSS();
         else if (possibleQueryType == "DISTINCT")
             return syntacticParseDISTINCT();
-        else if (possibleQueryType == "SORT")
-            return syntacticParseSORT();
+
         else {
             cout << "SYNTAX ERROR" << endl;
             return false;
@@ -115,9 +117,8 @@ void ParsedQuery::clear() {
     this->selectionSecondColumnName = "";
     this->selectionIntLiteral = 0;
 
-    this->sortingStrategy = NO_SORT_CLAUSE;
-    this->sortResultRelationName = "";
-    this->sortColumnName = "";
+    this->sortingStrategy.clear();
+    this->sortColumnName.clear();
     this->sortRelationName = "";
 
     this->sourceFileName = "";

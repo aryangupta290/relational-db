@@ -27,7 +27,7 @@ class Page {
 class TablePage : public Page {
    private:
     string tableName;
-    string pageIndex;
+    int pageIndex;
 
    public:
     TablePage();

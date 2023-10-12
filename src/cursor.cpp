@@ -1,5 +1,8 @@
 #include "global.h"
 
+Cursor::Cursor() {
+}
+
 Cursor::Cursor(string tableName, int pageIndex) {
     logger.log("Cursor::Cursor");
     this->page = bufferManager.getTablePage(tableName, pageIndex);

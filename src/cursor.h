@@ -16,6 +16,7 @@ class Cursor {
     int pagePointer;
 
    public:
+    Cursor();
     Cursor(string tableName, int pageIndex);
     vector<int> getNext();
     void nextPage(int pageIndex);

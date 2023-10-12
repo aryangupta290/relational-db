@@ -96,9 +96,8 @@ class ParsedQuery {
     string selectionSecondColumnName = "";
     int selectionIntLiteral = 0;
 
-    SortingStrategy sortingStrategy = NO_SORT_CLAUSE;
-    string sortResultRelationName = "";
-    string sortColumnName = "";
+    vector<string> sortingStrategy;
+    vector<string> sortColumnName;
     string sortRelationName = "";
 
     string loadMatrixFileName = "";

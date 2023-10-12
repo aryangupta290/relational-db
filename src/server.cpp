@@ -7,6 +7,7 @@ float BLOCK_SIZE = 1;
 uint BLOCK_COUNT = 2;
 uint PRINT_COUNT = 20;
 uint MATRIX_PAGE_DIMENSION = (int)sqrt(((int)BLOCK_SIZE * 1024) / sizeof(int));
+uint BUFFER_SIZE = 10;
 // uint MATRIX_PAGE_DIMENSION = 3;
 long long int num_blocks_read = 0;
 long long int num_blocks_write = 0;

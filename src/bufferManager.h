@@ -38,7 +38,7 @@ class BufferManager {
 
     TablePage getTablePage(string tableName, int pageIndex);
     void deletePageForTable(string tableName, int pageIndex);
-    void writePageForTable(string tableName, int pageIndex, vector<vector<int>> rows, int rowCount);
+    static void writePageForTable(string tableName, int pageIndex, vector<vector<int>> rows, int rowCount);
 
     MatrixPage getMatrixPage(string matrixName, int rowId, int colId);
     void deletePageForMatrix(string matrixName, int rowId, int colId);

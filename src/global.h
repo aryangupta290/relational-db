@@ -3,6 +3,7 @@
 extern float BLOCK_SIZE;
 extern uint BLOCK_COUNT;
 extern uint PRINT_COUNT;
+extern uint BUFFER_SIZE;
 extern uint MATRIX_PAGE_DIMENSION;
 extern long long int num_blocks_read;
 extern long long int num_blocks_write;

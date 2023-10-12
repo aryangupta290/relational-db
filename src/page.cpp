@@ -21,6 +21,7 @@ Page::Page() {
  * @param tableName
  * @param pageIndex
  */
+TablePage::TablePage() {}
 TablePage::TablePage(string tableName, int pageIndex) {
     logger.log("Page::Page");
     this->tableName = tableName;
@@ -90,7 +91,6 @@ MatrixPage::MatrixPage(string matrixName, int rowId, int colId) {
                     // Handle the error, e.g., return or throw an exception
                 }
                 this->rows[i][j] = temp;  // -1's are also filled
-                
             }
         }
         readPageFile.close();  // Close the file when done

@@ -184,7 +184,7 @@ void BufferManager::deletePageForMatrix(string matrixName, int rowId, int colId)
 }
 
 string getPageName(const Pages& page) {
-    if (holds_alternative<Page>(page)) {
+    if (std::holds_alternative<Page>(page)) {
         const Page& pageVariant = std::get<Page>(page);
         return pageVariant.pageName;
     } else if (std::holds_alternative<TablePage>(page)) {

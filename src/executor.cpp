@@ -60,7 +60,7 @@ void executeCommand() {
             executeSELECTION();
             break;
         case SORT:
-            executeSORT();
+            executeSORT(true);
             break;
         case SOURCE:
             executeSOURCE();

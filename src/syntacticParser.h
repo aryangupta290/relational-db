@@ -3,6 +3,8 @@
 
 using namespace std;
 
+#define DEFAULT 99999
+
 enum QueryType {
     CLEAR,
     CROSS,
@@ -108,6 +110,16 @@ class ParsedQuery {
     string orderStrategy = "";
     string orderRelationName = "";
     string orderResultRelationName = "";
+
+    // Group by
+    string groupColumnName = "";
+    string groupRelationName = "";
+    string groupResultRelationName = "";
+    BinaryOperator groupBinaryOperator = NO_BINOP_CLAUSE;
+    string groupAttributeValue = "";
+    string groupFunction = "";
+    string groupReturnFunction = "";
+    string groupReturnColumnName = "";
 
     string loadMatrixFileName = "";
     string printMatrixFileName = "";

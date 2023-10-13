@@ -26,7 +26,11 @@ bool syntacticParseORDER()
 bool semanticParseORDER()
 {
     logger.log("semanticParseORDER");
-
+    if (tableCatalogue.isTable(parsedQuery.orderResultRelationName))
+    {
+        cout << "SEMANTIC ERROR: Resultant relation already exists" << endl;
+        return false;
+    }
     if (!tableCatalogue.isTable(parsedQuery.orderRelationName))
     {
         cout << "SEMANTIC ERROR: Relation doesn't exist" << endl;

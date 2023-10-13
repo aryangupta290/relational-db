@@ -9,9 +9,11 @@
 class TableCatalogue
 {
 
-    unordered_map<string, Table*> tables;
+    // unordered_map<string, Table*> tables;
 
 public:
+    unordered_map<string, Table*> tables;
+
     TableCatalogue() {}
     void insertTable(Table* table);
     void deleteTable(string tableName);

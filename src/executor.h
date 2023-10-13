@@ -22,7 +22,10 @@ void executeCompute();
 void executeRENAME();
 void executeSELECTION();
 void executeSORT(bool isExport);
+void executeORDER();
+void executeGROUP();
 void executeSOURCE();
+
 
 bool evaluateBinOp(int value1, int value2, BinaryOperator binaryOperator);
 void printRowCount(int rowCount);

@@ -1,11 +1,13 @@
 #include "global.h"
 
-bool syntacticParse() {
+bool syntacticParse()
+{
     logger.log("syntacticParse");
     string possibleQueryType = tokenizedQuery[0];
     logger.log(possibleQueryType);
 
-    if (tokenizedQuery.size() < 2) {
+    if (tokenizedQuery.size() < 2)
+    {
         cout << "SYNTAX ERROR" << endl;
         return false;
     }
@@ -42,9 +44,12 @@ bool syntacticParse() {
         return syntacticParseSOURCE();
     else if (possibleQueryType == "SORT")
         return syntacticParseSORT();
-    else {
+
+    else
+    {
         string resultantRelationName = possibleQueryType;
-        if (tokenizedQuery[1] != "<-" || tokenizedQuery.size() < 3) {
+        if (tokenizedQuery[1] != "<-" || tokenizedQuery.size() < 3)
+        {
             cout << "SYNTAX ERROR" << endl;
             return false;
         }
@@ -59,8 +64,14 @@ bool syntacticParse() {
             return syntacticParseCROSS();
         else if (possibleQueryType == "DISTINCT")
             return syntacticParseDISTINCT();
-
-        else {
+        else if (possibleQueryType == "ORDER")
+            return syntacticParseORDER();
+        else if (possibleQueryType == "GROUP")
+            return syntacticParseGROUP();
+        else if (possibleQueryType == "JOIN")
+            return syntacticParseJOIN();
+        else
+        {
             cout << "SYNTAX ERROR" << endl;
             return false;
         }
@@ -68,10 +79,12 @@ bool syntacticParse() {
     return false;
 }
 
-ParsedQuery::ParsedQuery() {
+ParsedQuery::ParsedQuery()
+{
 }
 
-void ParsedQuery::clear() {
+void ParsedQuery::clear()
+{
     logger.log("ParseQuery::clear");
     this->queryType = UNDETERMINED;
 
@@ -132,7 +145,8 @@ void ParsedQuery::clear() {
  * @return true
  * @return false
  */
-bool isFileExists(string tableName) {
+bool isFileExists(string tableName)
+{
     string fileName = "../data/" + tableName + ".csv";
     struct stat buffer;
     return (stat(fileName.c_str(), &buffer) == 0);
@@ -146,7 +160,8 @@ bool isFileExists(string tableName) {
  * @return true
  * @return false
  */
-bool isQueryFile(string fileName) {
+bool isQueryFile(string fileName)
+{
     fileName = "../data/" + fileName + ".ra";
     struct stat buffer;
     return (stat(fileName.c_str(), &buffer) == 0);

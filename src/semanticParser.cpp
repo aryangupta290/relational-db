@@ -45,6 +45,10 @@ bool semanticParse() {
             return semanticParseSORT();
         case SOURCE:
             return semanticParseSOURCE();
+        case ORDER: 
+            return semanticParseORDER();
+        case GROUP:
+            return semanticParseGROUP();
         default:
             cout << "SEMANTIC ERROR" << endl;
     }

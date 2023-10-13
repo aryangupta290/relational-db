@@ -65,6 +65,12 @@ void executeCommand() {
         case SOURCE:
             executeSOURCE();
             break;
+        case ORDER:
+            executeORDER();
+            break;
+        case GROUP:
+            executeGROUP();
+            break;
         default:
             cout << "PARSING ERROR" << endl;
     }

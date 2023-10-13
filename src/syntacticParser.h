@@ -25,6 +25,8 @@ enum QueryType {
     SELECTION,
     SORT,
     SOURCE,
+    ORDER,
+    GROUP,
     UNDETERMINED
 };
 
@@ -99,6 +101,13 @@ class ParsedQuery {
     vector<string> sortingStrategy;
     vector<string> sortColumnName;
     string sortRelationName = "";
+    string sortResultRelationName = "";
+
+    // Order by
+    string orderColumnName = "";
+    string orderStrategy = "";
+    string orderRelationName = "";
+    string orderResultRelationName = "";
 
     string loadMatrixFileName = "";
     string printMatrixFileName = "";
@@ -137,6 +146,8 @@ bool syntacticParseMATRIXRENAME();
 bool syntacticParseMATRIXEXPORT();
 bool syntacticParseCHECKSYMMETRY();
 bool syntacticParseCOMPUTE();
+bool syntacticParseORDER();
+bool syntacticParseGROUP();
 
 bool isFileExists(string tableName);
 bool isQueryFile(string fileName);

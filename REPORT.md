@@ -110,8 +110,7 @@ In essence, the `executeJOIN()` function Creates sorted copies of the two tables
 > ## CONTRIBUTIONS
 > 
 > Completeing the proect required implementing the merge sort algorithm and algorithms for all the part 3 commands that utilized the sort function. Hence We all collaborated and came up with the design and implementation logic for all the parts together. Any issues with the logic were resolved collaboratively through discussion among teammates.
-
-For the coding part, this was the division of work:
+> For the coding part, this was the division of work:
 >>ARYAN - External Sort
 >
 >>PRATHAM - Group, Join

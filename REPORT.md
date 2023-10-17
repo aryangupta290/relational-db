@@ -102,7 +102,7 @@ In essence, the `executeJOIN()` function Creates sorted copies of the two tables
 >1. **Understanding of Database Operations**: We've delved deep into some fundamental database operations, understanding how they work at a low level, using cursors as data pointers for iterative data retrieval.
 >2. **Memory Constraints & External Sorting**: For operations like sorting and joining, data might not always fit into memory. We've practically implemented external sorting using the sort-merge join algorithm, a technique to handle such situations.
 >3. **Algorithmic Thinking**: Implementing these commands has honed our algorithmic thinking, especially when optimizing for constraints like memory usage and speed. Certain operations, like joins, can be computationally intensive. Understanding their complexity and potential optimizations is crucial for building efficient database systems.
->4. **MOdulr Coding**: The code is structured in functions (`executeSORT`, `executeJOIN`, etc.), promoting reusability and readability.
+>4. **Modular Coding**: The code is structured in functions (`executeSORT`, `executeJOIN`, etc.), promoting reusability and readability.
 >5. **Intermediate Data Storage**: Creating temporary or intermediate tables (like sorted copies of original tables) is sometimes necessary to simplify and break down complex operations.
 >6. **Database Design Patterns**: Concepts like table catalogues, which hold metadata about tables, showcase common patterns and best practices in database system design.
 >7. **Debugging & Testing**: With such intricate operations, debugging and testing become essential skills. We've likely honed these skills by ensuring each function works as expected and handles edge cases.Hence we have code a basic testsuit generator.

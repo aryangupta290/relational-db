@@ -43,7 +43,9 @@ class Table {
     void renameColumn(string fromColumnName, string toColumnName);
     void print();
     void makePermanent();
+    void makeTemp();
     bool isPermanent();
+    bool isTemp();
     void getNextPage(Cursor *cursor);
     Cursor getCursor();
     int getColumnIndex(string columnName);

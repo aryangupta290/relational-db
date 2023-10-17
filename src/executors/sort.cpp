@@ -177,10 +177,11 @@ void executeSORT(bool isExport = true) {
         BufferManager::writePageForTable(table->tableName, page_id, rows, rows.size());
     }
     tableCatalogue.deleteTable(sortedChunks[0]->tableName);
+
+    bufferManager.pages.clear();
     if (isExport){
         table->makePermanent();
         cout << "SORT EXECUTED SUCCESSFULLY\n";
     }
-    bufferManager.pages.clear();
     return;
 }

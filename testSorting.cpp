@@ -2,11 +2,11 @@
 #include <iostream>
 
 int main() {
-    const int numRows = 200;
+    const int numRows = 20;
     const int numCols = 5;
     const int maxValue = 100;
 
-    std::ofstream csvFile("./data/testSort.csv");
+    std::ofstream csvFile("./data/testSort2.csv");
 
     if (!csvFile.is_open()) {
         std::cerr << "Error opening the CSV file." << std::endl;

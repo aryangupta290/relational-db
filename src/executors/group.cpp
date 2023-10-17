@@ -36,7 +36,7 @@ bool syntacticParseGROUP()
         parsedQuery.groupBinaryOperator = NOT_EQUAL;
     else
     {
-        cout << "SYNTAC ERROR" << endl;
+        cout << "SYNTAX ERROR" << endl;
         return false;
     }
     string temp = tokenizedQuery[8];
@@ -50,7 +50,7 @@ bool syntacticParseGROUP()
     }
     else
     {
-        cout << "SYNTAC ERROR: Aggregate function error" << endl;
+        cout << "SYNTAX ERROR: Aggregate function error" << endl;
         return false;
     }
     temp = tokenizedQuery[12];
@@ -60,7 +60,7 @@ bool syntacticParseGROUP()
     }
     else
     {
-        cout << "SYNTAC ERROR: Return attribute doesn't match aggregating attribute" << endl;
+        cout << "SYNTAX ERROR: Return attribute doesn't match aggregating attribute" << endl;
         return false;
     }
     return true;
@@ -114,6 +114,7 @@ void executeGROUP()
         row = cursor.getNext();
         int prev = -DEFAULT;
         vector<int> group_ids;
+
         // partitioning into groups and storing as tables in a table catalogue
         while (!row.empty())
         {
@@ -122,10 +123,6 @@ void executeGROUP()
             // cout << "prev " << prev << endl;
             while (row[columnIndex] == prev)
             {
-                // for (auto v : row)
-                //     cout << v << " ";
-                // cout << endl;
-
                 group->writeRow<int>(row);
                 row = cursor.getNext();
                 if (row.empty())
@@ -145,24 +142,20 @@ void executeGROUP()
                 break;
             prev = row[columnIndex];
         }
+        
         // aggregating the groups
         vector<string> retCols;
         retCols.push_back(parsedQuery.groupColumnName);
         retCols.push_back(parsedQuery.groupReturnFunction + parsedQuery.groupReturnColumnName);
         Table *resultantTable = new Table(parsedQuery.groupResultRelationName, retCols);
-        // cout << "group_ids size " << group_ids.size() << endl;
         for (auto group_id : group_ids)
         {
             int sum = 0, maximum = -DEFAULT, minimum = DEFAULT, count = 0;
-            // cout << "group_id " << group_id << endl;
             Table *group = tableCatalogue.getTable("partition_" + to_string(group_id));
             cursor = group->getCursor();
             row = cursor.getNext();
             while (!row.empty())
             {
-                // for (auto v : row)
-                //     cout << v << " ";
-                // cout << endl;
                 sum += row[group->getColumnIndex(parsedQuery.groupReturnColumnName)];
                 maximum = max(row[group->getColumnIndex(parsedQuery.groupReturnColumnName)], maximum);
                 minimum = min(row[group->getColumnIndex(parsedQuery.groupReturnColumnName)], minimum);

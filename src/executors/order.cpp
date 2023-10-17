@@ -9,16 +9,15 @@
 bool syntacticParseORDER()
 {
     logger.log("syntacticParseOrder");
-    // cout << tokenizedQuery.size() <<" " << tokenizedQuery[3] << " " << tokenizedQuery[6] << " " << tokenizedQuery[5] << endl;
     if (tokenizedQuery.size() != 8 || tokenizedQuery[3] != "BY" || tokenizedQuery[6] != "ON" || (tokenizedQuery[5] != "ASC" && tokenizedQuery[5] != "DESC"))
     {
-        cout << "SYNTAX ERROR oop" << endl;
+        cout << "SYNTAX ERROR" << endl;
         return false;
     }
     parsedQuery.queryType = ORDER;
     parsedQuery.orderRelationName = tokenizedQuery[7];
     parsedQuery.orderColumnName = tokenizedQuery[4];
-    parsedQuery.orderStrategy = tokenizedQuery[6];
+    parsedQuery.orderStrategy = tokenizedQuery[5];
     parsedQuery.orderResultRelationName = tokenizedQuery[0];
     return true;
 }
@@ -67,6 +66,8 @@ void executeORDER()
         parsedQuery.sortColumnName.push_back(parsedQuery.orderColumnName);
         parsedQuery.sortingStrategy.push_back(parsedQuery.orderStrategy);
         executeSORT(false);
+        // bufferManager.pages.clear();
+        resultantTable->makeTemp();
         cout << "ORDER EXECUTED SUCCESSFULLY\n";
     }
     else

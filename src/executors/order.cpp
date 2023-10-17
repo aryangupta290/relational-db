@@ -9,8 +9,8 @@
 bool syntacticParseORDER()
 {
     logger.log("syntacticParseOrder");
-    cout << tokenizedQuery.size() <<" " << tokenizedQuery[3] << " " << tokenizedQuery[6] << " " << tokenizedQuery[5] << endl;
-    if (tokenizedQuery.size() != 8 && tokenizedQuery[3] != "BY" && tokenizedQuery[6] != "ON" && (tokenizedQuery[5] != "ASC" || tokenizedQuery[5] != "DESC"))
+    // cout << tokenizedQuery.size() <<" " << tokenizedQuery[3] << " " << tokenizedQuery[6] << " " << tokenizedQuery[5] << endl;
+    if (tokenizedQuery.size() != 8 || tokenizedQuery[3] != "BY" || tokenizedQuery[6] != "ON" || (tokenizedQuery[5] != "ASC" && tokenizedQuery[5] != "DESC"))
     {
         cout << "SYNTAX ERROR oop" << endl;
         return false;
@@ -26,7 +26,11 @@ bool syntacticParseORDER()
 bool semanticParseORDER()
 {
     logger.log("semanticParseORDER");
-
+    if (tableCatalogue.isTable(parsedQuery.orderResultRelationName))
+    {
+        cout << "SEMANTIC ERROR: Resultant relation already exists" << endl;
+        return false;
+    }
     if (!tableCatalogue.isTable(parsedQuery.orderRelationName))
     {
         cout << "SEMANTIC ERROR: Relation doesn't exist" << endl;

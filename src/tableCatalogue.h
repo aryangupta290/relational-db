@@ -8,7 +8,6 @@
  */
 class TableCatalogue
 {
-
     unordered_map<string, Table*> tables;
 
 public:

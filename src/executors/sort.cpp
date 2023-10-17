@@ -3,7 +3,7 @@
  * @brief File contains method to process SORT commands.
  *
  * syntax:
- * R <- SORT relation_name BY column_name IN sorting_order
+ * SORT relation_name BY column_name IN sorting_order
  *
  * sorting_order = ASC | DESC
  */
@@ -181,5 +181,6 @@ void executeSORT(bool isExport = true) {
         table->makePermanent();
         cout << "SORT EXECUTED SUCCESSFULLY\n";
     }
+    bufferManager.pages.clear();
     return;
 }

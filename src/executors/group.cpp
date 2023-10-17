@@ -11,7 +11,7 @@
 bool syntacticParseGROUP()
 {
     logger.log("syntacticParseGroup");
-    if (tokenizedQuery.size() != 13 && tokenizedQuery[3] != "BY" && tokenizedQuery[5] != "FROM" && tokenizedQuery[7] != "HAVING" && tokenizedQuery[11] != "RETURN")
+    if (tokenizedQuery.size() != 13 || tokenizedQuery[3] != "BY" || tokenizedQuery[5] != "FROM" || tokenizedQuery[7] != "HAVING" || tokenizedQuery[11] != "RETURN")
     {
         cout << "SYNTAX ERROR" << endl;
         return false;
@@ -40,7 +40,6 @@ bool syntacticParseGROUP()
         return false;
     }
     string temp = tokenizedQuery[8];
-    cout << temp << endl;
     string aggregatePattern = R"((MAX|MIN|COUNT|SUM|AVG)\((\w+)\))";
     regex pattern(aggregatePattern);
     smatch match;
@@ -101,7 +100,6 @@ void executeGROUP()
         sortedTable->writeRow<int>(row);
         row = cursor.getNext();
     }
-    cout << "SORTING\n" << endl;
     if (sortedTable->blockify())
     {
         tableCatalogue.insertTable(sortedTable);
@@ -115,69 +113,98 @@ void executeGROUP()
         cursor = sortedTable->getCursor();
         row = cursor.getNext();
         int prev = -DEFAULT;
-        TableCatalogue groups;
-        cout << row[0]<< row[1]<< "REACHED\n";
+        vector<int> group_ids;
+        // partitioning into groups and storing as tables in a table catalogue
         while (!row.empty())
         {
-            Table *group = new Table(to_string(row[columnIndex]), sortedTable->columns);
-            cout<<"prev "<<prev<<endl;
+            Table *group = new Table("partition_" + to_string(row[columnIndex]), sortedTable->columns);
+            group_ids.push_back(row[columnIndex]);
+            // cout << "prev " << prev << endl;
             while (row[columnIndex] == prev)
             {
+                // for (auto v : row)
+                //     cout << v << " ";
+                // cout << endl;
+
+                group->writeRow<int>(row);
                 row = cursor.getNext();
                 if (row.empty())
                     break;
-                group->writeRow<int>(row);
             }
             if (group->blockify())
             {
-                groups.insertTable(group);
+                tableCatalogue.insertTable(group);
             }
             else
             {
                 group->unload();
+                group_ids.pop_back();
                 delete group;
             }
+            if (row.empty())
+                break;
             prev = row[columnIndex];
         }
-        // select groups based on having condition
-        cout<<"gals"<<endl;
+        // aggregating the groups
         vector<string> retCols;
         retCols.push_back(parsedQuery.groupColumnName);
         retCols.push_back(parsedQuery.groupReturnFunction + parsedQuery.groupReturnColumnName);
         Table *resultantTable = new Table(parsedQuery.groupResultRelationName, retCols);
-        int sum = 0, maximum = -DEFAULT, minimum = DEFAULT, count = 0;
-        cout<<"guys"<<endl;
-        for (auto iterat : groups.tables)
+        // cout << "group_ids size " << group_ids.size() << endl;
+        for (auto group_id : group_ids)
         {
-            
-            cout<< iterat.first << endl;
-            // int groupID = stoi(iterat.first);
-            // Table group = *iterat.second;
-            // cursor = group.getCursor();
-            // while (!row.empty())
-            // {
-            //     row = cursor.getNext();
-            //     if (row.empty())
-            //         break;
-            //     sum += row[group.getColumnIndex(parsedQuery.groupReturnColumnName)];
-            //     maximum = max(row[group.getColumnIndex(parsedQuery.groupReturnColumnName)], maximum);
-            //     minimum = min(row[group.getColumnIndex(parsedQuery.groupReturnColumnName)], minimum);
-            //     count++;
-            // }
-            // vector<int> retRow;
-            // retRow.push_back(groupID);
-            // if (parsedQuery.groupReturnFunction == "SUM")
-            //     retRow.push_back(sum);
-            // else if (parsedQuery.groupReturnFunction == "MAX")
-            //     retRow.push_back(maximum);
-            // else if (parsedQuery.groupReturnFunction == "MIN")
-            //     retRow.push_back(minimum);
-            // else if (parsedQuery.groupReturnFunction == "COUNT")
-            //     retRow.push_back(count);
-            // else if (parsedQuery.groupReturnFunction == "AVG")
-            //     retRow.push_back(floor(sum / count));
-            // if (evaluateBinOp(retRow[1], stoi(parsedQuery.groupAttributeValue), parsedQuery.groupBinaryOperator))
-            //     resultantTable->writeRow<int>(retRow);
+            int sum = 0, maximum = -DEFAULT, minimum = DEFAULT, count = 0;
+            // cout << "group_id " << group_id << endl;
+            Table *group = tableCatalogue.getTable("partition_" + to_string(group_id));
+            cursor = group->getCursor();
+            row = cursor.getNext();
+            while (!row.empty())
+            {
+                // for (auto v : row)
+                //     cout << v << " ";
+                // cout << endl;
+                sum += row[group->getColumnIndex(parsedQuery.groupReturnColumnName)];
+                maximum = max(row[group->getColumnIndex(parsedQuery.groupReturnColumnName)], maximum);
+                minimum = min(row[group->getColumnIndex(parsedQuery.groupReturnColumnName)], minimum);
+                count++;
+                row = cursor.getNext();
+            }
+            // cout << "sum " << sum << endl;
+            // cout << "maximum " << maximum << endl;
+            // cout << "minimum " << minimum << endl;
+            // cout << "count " << count << endl;
+            // cout << "avg " << floor(sum / count) << endl;
+            vector<int> retRow;
+            retRow.push_back(group_id);
+
+            if (parsedQuery.groupReturnFunction == "SUM")
+                retRow.push_back(sum);
+            else if (parsedQuery.groupReturnFunction == "MAX")
+                retRow.push_back(maximum);
+            else if (parsedQuery.groupReturnFunction == "MIN")
+                retRow.push_back(minimum);
+            else if (parsedQuery.groupReturnFunction == "COUNT")
+                retRow.push_back(count);
+            else if (parsedQuery.groupReturnFunction == "AVG")
+                retRow.push_back(floor(sum / count));
+
+            int aggregateValue;
+            if (parsedQuery.groupFunction == "SUM")
+                aggregateValue = sum;
+            else if (parsedQuery.groupFunction == "MAX")
+                aggregateValue = maximum;
+            else if (parsedQuery.groupFunction == "MIN")
+                aggregateValue = minimum;
+            else if (parsedQuery.groupFunction == "COUNT")
+                aggregateValue = count;
+            else if (parsedQuery.groupFunction == "AVG")
+                aggregateValue = floor(sum / count);
+
+            if (evaluateBinOp(aggregateValue, stoi(parsedQuery.groupAttributeValue), parsedQuery.groupBinaryOperator)){
+                resultantTable->writeRow<int>(retRow);
+                // cout << "written " << retRow[0] << " " << retRow[1] << endl;
+            }
+            tableCatalogue.deleteTable("partition_" + to_string(group_id));
         }
         if (resultantTable->blockify())
         {
@@ -190,6 +217,7 @@ void executeGROUP()
             resultantTable->unload();
             delete resultantTable;
         }
+        tableCatalogue.deleteTable("SortedTable");
     }
     else
     {

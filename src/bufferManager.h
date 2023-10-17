@@ -24,7 +24,6 @@
  *
  */
 class BufferManager {
-    deque<Pages> pages;
     bool inPool(string pageName);
     Pages getFromPool(string pageName);
 
@@ -33,6 +32,8 @@ class BufferManager {
     MatrixPage insertMatrixIntoPool(string matrixName, int rowId, int colId);
 
    public:
+    deque<Pages> pages;
+
     BufferManager();
     void deleteFile(string fileName);
 

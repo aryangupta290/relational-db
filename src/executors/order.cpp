@@ -9,8 +9,8 @@
 bool syntacticParseORDER()
 {
     logger.log("syntacticParseOrder");
-    cout << tokenizedQuery.size() <<" " << tokenizedQuery[3] << " " << tokenizedQuery[6] << " " << tokenizedQuery[5] << endl;
-    if (tokenizedQuery.size() != 8 && tokenizedQuery[3] != "BY" && tokenizedQuery[6] != "ON" && (tokenizedQuery[5] != "ASC" || tokenizedQuery[5] != "DESC"))
+    // cout << tokenizedQuery.size() <<" " << tokenizedQuery[3] << " " << tokenizedQuery[6] << " " << tokenizedQuery[5] << endl;
+    if (tokenizedQuery.size() != 8 || tokenizedQuery[3] != "BY" || tokenizedQuery[6] != "ON" || (tokenizedQuery[5] != "ASC" && tokenizedQuery[5] != "DESC"))
     {
         cout << "SYNTAX ERROR oop" << endl;
         return false;
